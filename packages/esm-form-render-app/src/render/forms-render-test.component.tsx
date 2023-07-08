@@ -8,7 +8,6 @@ import { applyFormIntent, loadSubforms, OHRIForm, OHRIFormSchema } from '@openmr
 import { useTranslation } from 'react-i18next';
 import { ConfigObject, useConfig } from '@openmrs/esm-framework';
 import { openmrsFetch } from '@openmrs/esm-framework';
-import { indexOf } from 'lodash';
 
 function FormRenderTest() {
   const { t } = useTranslation();
@@ -27,6 +26,7 @@ function FormRenderTest() {
   const jsonUrl = useMemo(() => new URLSearchParams(window.location.search).get('json'), []);
   const [key, setKey] = useState(0);
   const [defaultJson, setDefaultJson] = useState(localStorage.getItem('forms-render-test:draft-form'));
+
   // This is required because of the enforced CORS policy
   const corsProxy = 'ohri-form-render.globalhealthapp.net';
 
@@ -77,8 +77,9 @@ function FormRenderTest() {
   };
 
   const handleFormValidation = () => {
-    if (defaultJson) {
-      const parsedForm = typeof defaultJson == 'string' ? JSON.parse(defaultJson) : defaultJson;
+    
+    if (schemaInput) {
+      const parsedForm = typeof schemaInput == 'string' ? JSON.parse(schemaInput) : schemaInput;
 
       for (let i = 0; i < parsedForm.pages.length; i++) {
         for (let j = 0; j < parsedForm.pages[i].sections.length; j++) {
@@ -104,14 +105,14 @@ function FormRenderTest() {
               : console.log("❌ response UUID doesn't match concept UUID");
           })
           .catch((error) => {
-            if (error.message.includes('500')) {
+            if (error.message.includes(' 500 ')) {
               console.log('500 server error occurred!');
             }
 
             const clientErrors = ['0', '1', '3', '4'];
 
             clientErrors.forEach((i, index) => {
-              error.message.includes(`40${i}`) &&
+              error.message.includes(` 40${i} `) &&
                 console.log(
                   `${error.message.substring(
                     error.message.indexOf('40'),
@@ -119,7 +120,7 @@ function FormRenderTest() {
                   )} error occurred!`,
                 );
               if (index === 3) {
-                console.log(`❌ Concept UUID ${conceptObject.questionOptions.concept} not found`);
+                console.log(`❌ Concept UUID ${conceptObject.questionOptions.concept} not found, id:${conceptObject.id}`);
               }
             });
           })
@@ -131,12 +132,12 @@ function FormRenderTest() {
     const renderTypes =
 
       {
-        Numeric: ['number'],
-        Coded: ['select', 'checkbox', 'radio', 'toggle', 'content-switcher'],
-        Text: ['text', 'textarea'],
-        Date: ['date'],
-        Datetime: ['datetime'],
-        Boolean: ['toggle', 'select', 'radio', 'content-switcher'],
+        Numeric: ['number', 'fixed-value'],
+        Coded: ['select', 'checkbox', 'radio', 'toggle', 'content-switcher', 'fixed-value'],
+        Text: ['text', 'textarea', 'fixed-value'],
+        Date: ['date', 'fixed-value'],
+        Datetime: ['datetime', 'fixed-value'],
+        Boolean: ['toggle', 'select', 'radio', 'content-switcher', 'fixed-value'],
         Rule: ['repeating', 'group'],
       };
 
@@ -148,6 +149,7 @@ function FormRenderTest() {
       !renderTypes[responseObject.data.datatype.display].includes(conceptObject.questionOptions.rendering) &&
       console.log('❌ datatype rendering mismatch');
 
+      console.log("id:",conceptObject.id, "rendering:",conceptObject.questionOptions.rendering)
   };
 
   const handleFormSubmission = (e) => {
