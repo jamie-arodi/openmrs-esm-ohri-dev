@@ -61,7 +61,7 @@ export const EncounterList: React.FC<EncounterListProps> = ({
   const [isLoadingForms, setIsLoadingForms] = useState(true);
   const { isDead } = usePatientDeathStatus(patientUuid);
   const formNames = useMemo(() => formList.map((form) => form.name), []);
-  const { formsJson, isLoading: isLoadingFormsJson } = useFormsJson(formNames);
+  const { formsJson, isLoading: isLoadingFormsJson } = useFormsJson(formNames); //could use actual forms when testing
   const { encounters, isLoading, onFormSave } = useEncounterRows(patientUuid, encounterType, filter);
   const { moduleName, workspaceWindowSize, displayText, hideFormLauncher } = launchOptions;
 

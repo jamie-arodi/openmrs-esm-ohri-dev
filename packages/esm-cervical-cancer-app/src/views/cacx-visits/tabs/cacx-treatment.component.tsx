@@ -68,7 +68,6 @@ export const CacxTreatment: React.FC<CacxTreatmentProps> = ({ patientUuid }) => 
           return getObsFromEncounter(encounter, cacxTreatmentConcept);
         },
       },
-
       {
         key: 'actions',
         header: 'Actions',
