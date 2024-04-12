@@ -47,7 +47,7 @@ export const mockColumns = [
   },
 ];
 
-export const mockColumnsWithoutActionItems = [
+export const mockColumnsWithActionItems = [
   {
     key: 'deathDate',
     header: 'Death Date',
@@ -107,14 +107,6 @@ export const mockForms = [
 ];
 
 export const mockEncounter = [
-  {
-    uuid: 'ee106966-4cd9-4465-8ac2-dfac9e3751d3',
-    encounterDatetime: '2024-01-05T07:01:53.000+0000',
-  },
-  {
-    uuid: 'ee106966-4cd9-4465-8ac2-dfac9e3751d3',
-    encounterDatetime: '2024-01-05T07:01:53.000+0000',
-  },
   {
     uuid: 'ee106966-4cd9-4465-8ac2-dfac9e3751d3',
     encounterDatetime: '2024-01-05T07:01:53.000+0000',
